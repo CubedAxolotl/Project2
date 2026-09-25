@@ -19,33 +19,32 @@ SentinelScanner::Out SentinelScanner::feed(std::string_view chunk) {
 
     Out output = {"", false};//declares out
 
-    size_t index = combined.find(sentinel_);// index used to delete the sentinel_ text
+    size_t combinedIndex = combined.find(sentinel_);// index used to delete the sentinel_ text
 
-
-   if (combined.find(sentinel_)!=std::string::npos){
-
+    if (combined.find(sentinel_)!=std::string::npos){//checks if sentinel is found between strings
+    size_t combinedIndex = combined.find(sentinel_);// index used to delete the sentinel_ text
     output.sentinel_found= true;
-
-
-
-    output.safe_text = combined.substr(0, index);
+    output.safe_text = combined.substr(0, combinedIndex);
     pending_ = "";
     return output;
-   }
-   size_t keepSize = sentinel_.size()-1;
+   }else { //if no sentinel is found
+    size_t keepSentinelSize = sentinel_.size()-1;
 
-   if (combined.size()<= keepSize){
-    output.safe_text = "";
+    if(keepSentinelSize>combined.size()){
+        keepSentinelSize=combined.size();
+    }
+    size_t keepSafeSize = combined.size() - keepSentinelSize;
 
-    pending_ = combined;
-   }
-   else {
+   
 
-   output.safe_text = combined.substr(0,combined.size()-keepSize);
+    std::string safeText = combined.substr(0,keepSafeSize);
 
-   pending_ = combined.substr(combined.size()-keepSize);
-   }
+    pending_= combined.substr(keepSafeSize);
+
+    output.sentinel_found = false;
+    output.safe_text = safeText;
     return output;
+   }
 }
  
 SentinelScanner::Out SentinelScanner::flush() {
