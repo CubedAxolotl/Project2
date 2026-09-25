@@ -5,9 +5,9 @@
 
 #include "harness/harness.h"
 #include "model/scripted_client.h"
-#include "include/core/message.h"
-#include "include/core/conversation.h"
-#include "include/core/sentinel_scanner.h"
+#include "core/message.h"
+#include "core/conversation.h"
+#include "core/sentinel_scanner.h"
 #include <iostream>
 #include <fstream>
 #include <string>
