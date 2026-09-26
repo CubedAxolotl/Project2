@@ -37,21 +37,20 @@ Conversation& Conversation::operator=(const Conversation& other) {//copy assingm
         return *this;// this = this, so return this
     }
 
+    Message* newData = nullptr;
+    if (other.capacity_ > 0) {// makes new array first
+        newData = new Message[other.capacity_];
+
+        for (size_t i = 0; i < other.size_; i++) {
+            newData[i] = other.data_[i];
+        }
+    }
+
+    delete[] this->data_;
+    this->data_ = newData;
     this->size_ = other.size_;
-    this->capacity_ = other.capacity_; //copies the easy stuff
-    if (other.capacity_ == 0){//detects if capacity is zero
-        delete[] this->data_;
-        this->data_ = nullptr;
-        return *this;
-    }
+    this->capacity_ = other.capacity_;
 
-    delete[] this->data_; //deletes data 
-
-    
-    this->data_ = new Message[other.capacity_];//allocates messages
-    for (size_t i= 0; i<other.size_; i++){//copies data from other to this
-        this->data_[i]=other.data_[i];
-    }
 return *this;
 }
 
@@ -119,8 +118,8 @@ void Conversation::append(Message m) {
     return;
     }   
     else if(capacity_ == 0){//array is empty
-        Message *newMsg = new Message[2];
-        capacity_=2;
+        Message *newMsg = new Message[1];
+        capacity_=1;
         size_=1;
         newMsg[0] = m;
         data_ = newMsg;
